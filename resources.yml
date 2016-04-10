@@ -1,0 +1,22 @@
+# Resource files that need to be linked from index.html
+#
+# Obviously, there are two kinds of resources, CSS stylesheets that are linked
+# in the <head>, and Javascript scripts that are linked after the end of the
+# <body>
+#
+# Paths are expressed as ANT-compatible globs relative to the source root
+# in the order they need to be included. If a file satisfies more than one
+# glob, it will not appear more than once.
+
+stylesheets:
+# External deps
+- "static/bootstrap-3.3.6-dist/css/bootstrap.css"
+- "static/bootstrap-3.3.6-dist/css/bootstrap-theme.css"
+
+scripts:
+# External deps
+- "static/angular.js"
+- "static/angular-*.js"
+# Internal deps
+- "static/app/app.js"
+- "static/app/**/*.js"

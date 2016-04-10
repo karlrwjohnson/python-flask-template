@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='UTF-8'>
+  <title>Thing</title>
+  
+  {% for stylesheet in stylesheets %}
+    <link rel='stylesheet' href='{{stylesheet}}' />
+  {% endfor %}
+</head>
+<body>
+  <div class='container' ng-app='thing' ng-controller='MainCtrl'>
+    <div ui-view></div>
+  </div>
+</body>
+{% for script in scripts %}
+  <script src='{{script}}'></script>
+{% endfor %}
+</html>

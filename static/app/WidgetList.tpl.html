@@ -1,0 +1,10 @@
+<h1>Widgets:</h1>
+<button ui-sref='widgetsEdit()'>New</button>
+<ul>
+  <li ng-repeat='widget in widgets'>
+    <a ui-sref='widgetsEdit({ id: widget.id })'>
+      {{widget.name}}
+    </a>
+    <button ng-click='delete(widget)'>Delete</button>
+  </li>
+</ul>
