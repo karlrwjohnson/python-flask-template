@@ -9,10 +9,12 @@
 #    $ sudo pip install PyYAML
 # - glob2 -- github.com/miracle2k/python-glob2
 
+import contextlib
 import flask
 import glob2
 import json
-import psycopg2
+#import psycopg2
+import pg8000 as psycopg2
 import yaml
 
 from complexjson import json_response
@@ -29,14 +31,14 @@ if env['POSTGRES_CONNECTION_TYPE'] == 'socket':
   dbconn = psycopg2.connect(
     database=env['POSTGRES_DATABASE'],
     user=env['POSTGRES_USER'],
-    port=env['POSTGRES_PORT'],
+    unix_sock='/var/run/postgresql/.s.PGSQL.5432'
   )
 elif env['POSTGRES_CONNECTION_TYPE'] == 'network':
   dbconn = psycopg2.connect(
     database=env['POSTGRES_DATABASE'],
     user=env['POSTGRES_USER'],
     hostname=env['POSTGRES_HOSTNAME'],
-    port=env['POSTGRES_PORT'],
+    port=env['POSTGRES_PORT'] if 'POSTGRES_PORT' in env else 5432,
   )
 
 def list_resources (globstrings):
@@ -84,7 +86,7 @@ def hello():
 @app.route('/widgets', methods=['GET'])
 @json_response
 def get_widgets():
-  with dbconn.cursor() as cursor:
+  with contextlib.closing(dbconn.cursor()) as cursor:
     cursor.execute("select id, name, data from widgets")
     return [
       Widget(id=row[0], name=row[1], data=row[2])
@@ -94,7 +96,7 @@ def get_widgets():
 @app.route('/widgets/<int:id>', methods=['GET'])
 @json_response
 def get_widget(id):
-  with dbconn.cursor() as cursor:
+  with contextlib.closing(dbconn.cursor()) as cursor:
     cursor.execute("select id, name, data from widgets where id = %s", [id])
     row = auto_404(cursor.fetchone())
     return Widget(id=row[0], name=row[1], data=row[2])
@@ -109,7 +111,7 @@ def post_widget():
     abort(400)
   else:
     widget = Widget.fromJSON(post_data)
-    with dbconn.cursor() as cursor:
+    with contextlib.closing(dbconn.cursor()) as cursor:
       cursor.execute("""
         insert into widgets (name, data)
         values (%s, %s)
@@ -125,7 +127,7 @@ def put_widget(id):
   post_data = flask.request.get_json()
   if 'id' in post_data and post_data['id'] == id: 
     widget = Widget.fromJSON(post_data)
-    with dbconn.cursor() as cursor:
+    with contextlib.closing(dbconn.cursor()) as cursor:
       cursor.execute("""
         update widgets
         set name = %s, data = %s
@@ -141,7 +143,7 @@ def put_widget(id):
 
 @app.route('/widgets/<int:id>', methods=['DELETE'])
 def delete_widget(id):
-  with dbconn.cursor() as cursor:
+  with contextlib.closing(dbconn.cursor()) as cursor:
     cursor.execute("""
       delete from widgets
       where id = %s

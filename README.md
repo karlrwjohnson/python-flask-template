@@ -16,7 +16,7 @@ Other things it lacks:
   paste it here:
 
     CREATE TABLE widgets (
-      id integer NOT NULL,
+      id integer serial NOT NULL,
       name character varying(63) NOT NULL,
       data text
     );

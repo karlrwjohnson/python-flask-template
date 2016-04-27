@@ -1,3 +1,9 @@
+# compiled Python files
 *.pyc
+# VIM swap files
+*.swp
+# per-machine environment config
 env.yml
+# virtualenv directory
+env/
 
