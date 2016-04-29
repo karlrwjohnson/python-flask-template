@@ -8,16 +8,16 @@ app.controller('WidgetCtrl', function(
 
   $scope.save = function() {
     if ('id' in $scope.widget) {
-      $scope.widget.$update().then(function() {
+      $scope.widget.$update().then(function(widget) {
         console.log('Updated successfully');
-        $state.go('widgetsList');
+        $state.go('widgets.list', {highlight: widget.id});
       }, function(error) {
         console.error(error);
       });
     } else {
       resources.widgets.save($scope.widget, function() {
         console.log('Created successfully');
-        $state.go('widgetsList');
+        $state.go('widgets.list', {highlight: widget.id});
       }, function(error) {
         console.error(error);
       });

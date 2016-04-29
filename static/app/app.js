@@ -5,8 +5,8 @@ var app = angular.module('thing', [
 
 app.constant('LIB_ROOT', 'static/app/');
 
+// Log state changes
 app.run(function($rootScope) {
-  console.log('configuring root scope');
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     console.log('$stateChangeStart: ' + fromState.name + ' -> ' + toState.name, toParams);
   });
@@ -19,7 +19,21 @@ app.run(function($rootScope) {
   });
 });
 
-app.config(function($stateProvider, LIB_ROOT) {
+// Handle state redirects by hooking into UI Router
+app.run(function($rootScope, $state) {
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    if ('redirect' in toState) {
+      event.preventDefault();
+      $state.go(toState.redirect, toParams);
+    }
+  });
+});
+
+// Configure navigation
+app.config(function(
+  $stateProvider,
+  LIB_ROOT
+) {
   'use strict';
 
   $stateProvider
@@ -32,35 +46,47 @@ app.config(function($stateProvider, LIB_ROOT) {
     .state('root', {
       url: '/',
       templateUrl: LIB_ROOT + 'Main.tpl.html',
-    });
-   //$stateProvider .state('widgets', {
-   //   //url: '/widgets',
-   // });
-   $stateProvider .state('widgetsList', {
-      url: '/widgets/all',
+    })
+    .state('widgets', {
+      url: '/widgets',
+      template: '<div ui-view></div>',
+      redirect: 'widgets.list',
+    })
+    .state('widgets.list', {
+      url: '/all?{highlight}',
       templateUrl: LIB_ROOT + 'WidgetList.tpl.html',
       controller: 'WidgetListCtrl',
       resolve: {
         widgets: function(resources) {
           return resources.widgets.query().$promise;
         },
+        highlight: function($stateParams) {
+          console.log('highlight = ' + $stateParams.highlight);
+          return ('highlight' in $stateParams) ?
+            Number($stateParams.highlight) :
+            null;
+        },
       }
-    });
-  $stateProvider  .state('widgetsEdit', {
-      url: '/widgets/:id',
+    })
+    .state('widgets.new', {
+      url: '/new',
+      templateUrl: LIB_ROOT + 'Widget.tpl.html',
+      controller: 'WidgetCtrl',
+      resolve: {
+        widget: function(resources) {
+          return resources.widgets.new();
+        },
+      }
+    })
+    .state('widgets.edit', {
+      url: '/:id',
       templateUrl: LIB_ROOT + 'Widget.tpl.html',
       controller: 'WidgetCtrl',
       resolve: {
         widget: function($stateParams, resources) {
-          if ('id' in $stateParams && $stateParams.id !== '') {
-            return resources.widgets.get({ id: $stateParams.id }).$promise;
-          } else {
-            return {
-              name: '',
-              data: ''
-            }
-          }
+          return resources.widgets.get({ id: $stateParams.id }).$promise;
         },
       }
     })
+  ;
 });

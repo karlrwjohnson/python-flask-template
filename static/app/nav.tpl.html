@@ -1,0 +1,6 @@
+<a class='btn btn-default'
+   ng-repeat='link in links'
+   ui-sref='{{link.stateName}}(link.stateParams)'
+   ui-sref-active='btn-primary'>
+   {{link.text}}
+</a>
