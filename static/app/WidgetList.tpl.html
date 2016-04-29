@@ -1,11 +1,12 @@
-<h1>Widgets:</h1>
-<button ui-sref='widgets.new'>New</button>
+<h1>Widgets</h1>
 <ul>
   <li ng-repeat='widget in widgets'
       ng-class='::{mark: highlight == widget.id}'>
-    <a ui-sref='widgets.edit({ id: widget.id })'>
+    <a ui-sref='widgets.view({id: widget.id})'>
       {{widget.name}}
     </a>
-    <button ng-click='delete(widget)'>Delete</button>
+    <button class='btn btn-default' ui-sref='widgets.edit({id: widget.id})'>Edit</button>
+    <button class='btn btn-default' ng-click='delete(widget)'>Delete</button>
   </li>
 </ul>
+<button class='btn btn-primary' ui-sref='widgets.new'>New</button>

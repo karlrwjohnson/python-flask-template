@@ -1,0 +1,18 @@
+<h1>Widget</h1>
+
+<form onsubmit='return false'>
+  <div class='form-group'>
+    <label>Name</label>
+    <p>{{widget.name}}</p>
+  </div>
+
+  <div class='form-group'>
+    <label>Data</label>
+    <pre>{{widget.data}}</pre>
+  </div>
+</form>
+
+<button class='btn btn-default'
+        ui-sref='widgets.edit({id: widget.id})'>
+    Edit
+</button>

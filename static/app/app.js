@@ -70,7 +70,7 @@ app.config(function(
     })
     .state('widgets.new', {
       url: '/new',
-      templateUrl: LIB_ROOT + 'Widget.tpl.html',
+      templateUrl: LIB_ROOT + 'WidgetEdit.tpl.html',
       controller: 'WidgetCtrl',
       resolve: {
         widget: function(resources) {
@@ -78,9 +78,19 @@ app.config(function(
         },
       }
     })
-    .state('widgets.edit', {
+    .state('widgets.view', {
       url: '/:id',
-      templateUrl: LIB_ROOT + 'Widget.tpl.html',
+      templateUrl: LIB_ROOT + 'WidgetView.tpl.html',
+      controller: 'WidgetCtrl',
+      resolve: {
+        widget: function($stateParams, resources) {
+          return resources.widgets.get({ id: $stateParams.id }).$promise;
+        },
+      }
+    })
+    .state('widgets.edit', {
+      url: '/:id/edit',
+      templateUrl: LIB_ROOT + 'WidgetEdit.tpl.html',
       controller: 'WidgetCtrl',
       resolve: {
         widget: function($stateParams, resources) {
