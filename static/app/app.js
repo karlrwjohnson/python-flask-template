@@ -14,7 +14,7 @@ app.run(function($rootScope) {
     console.log('$stateChangeSuccess: ' + fromState.name + ' -> ' + toState.name);
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    console.log('$stateChangeError: ' + fromState.name + ' -> ' + toState.name, error);
+    console.log('$stateChangeError: ' + fromState.name + ' -> ' + toState.name + '(', toParams, ')\n', error);
     console.error(error.stack);
   });
 });

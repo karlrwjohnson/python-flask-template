@@ -19,7 +19,7 @@ app.controller('WidgetCtrl', function(
         console.error(error);
       });
     } else {
-      resources.widgets.save($scope.widget, function() {
+      resources.widgets.save($scope.widget, function(widget) {
         console.log('Created successfully');
         $state.go('widgets.view', {id: widget.id});
       }, function(error) {

@@ -1,4 +1,4 @@
-=== Basic Flask/Angular template ===
+# Basic Flask/Angular template
 
 This is the world's least-featured MVC application, supporting exactly one REST
 endpoint and barely any UI. That said, I think it would make a decent starting
@@ -12,11 +12,3 @@ Other things it lacks:
   expected to have installed yourself. Mostly because I don't know how
   virtualenv works.
 - User management or authentication
-- Database SQL setup scripts: There's only one table dependency, so I'll just
-  paste it here:
-
-    CREATE TABLE widgets (
-      id integer serial NOT NULL,
-      name character varying(63) NOT NULL,
-      data text
-    );
