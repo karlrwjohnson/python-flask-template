@@ -15,7 +15,7 @@ app.run(function($rootScope) {
   });
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     console.log('$stateChangeError: ' + fromState.name + ' -> ' + toState.name + '(', toParams, ')\n', error);
-    console.error(error.stack);
+    console.error(error.stack || error);
   });
 });
 
@@ -95,6 +95,31 @@ app.config(function(
       resolve: {
         widget: function($stateParams, resources) {
           return resources.widgets.get({ id: $stateParams.id }).$promise;
+        },
+      }
+    })
+    .state('users', {
+      url: '/users',
+      template: '<div ui-view></div>',
+      redirect: 'users.list',
+    })
+    .state('users.list', {
+      url: '/all',
+      templateUrl: LIB_ROOT + 'UserList.tpl.html',
+      controller: 'UserListCtrl',
+      resolve: {
+        users: function(resources) {
+          return resources.users.query().$promise;
+        },
+      }
+    })
+    .state('users.new', {
+      url: '/new',
+      templateUrl: LIB_ROOT + 'UserCreate.tpl.html',
+      controller: 'UserCreateCtrl',
+      resolve: {
+        user: function(resources) {
+          return resources.users.new();
         },
       }
     })

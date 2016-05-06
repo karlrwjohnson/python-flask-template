@@ -7,6 +7,10 @@ app.constant('LINKS', [
     stateParams: {},
     text: 'Widgets'
   },
+  { stateName: 'users',
+    stateParams: {},
+    text: 'Users'
+  },
 ]);
 
 app.directive('nav', function(LIB_ROOT, LINKS) {

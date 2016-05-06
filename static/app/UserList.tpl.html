@@ -1,0 +1,32 @@
+<h1>Users</h1>
+
+<table class='table table-grid'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody ng-if='users.length > 0'>
+    <tr ng-repeat='user in users'>
+      <td>{{user.name}}</td>
+      <td>{{user.username}}</td>
+      <td>
+        <button class='btn btn-default'
+                ng-click='delete(user)'
+                >Delete</button>
+      </td>
+    </tr>
+  </tbody>
+  <tbody ng-if='users.length === 0'>
+    <tr>
+      <td colspan='3'
+          class='text-center'>
+        <em>You don't have any users yet!</em>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a class='btn btn-primary' ui-sref='users.new'>Create User</a></p>

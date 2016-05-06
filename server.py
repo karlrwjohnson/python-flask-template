@@ -18,6 +18,7 @@ app.init(__name__,
 )
 
 import index
+import users
 import widgets
 
 if __name__ == '__main__':

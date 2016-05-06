@@ -29,5 +29,14 @@ app.service('resources', function($resource) {
       $resource('/widgets/:id', {id: '@id'}, methods),
       { name: '', data: '' }
     ),
+    users: addTemplate(
+      $resource('/users/:id', {id: '@id'}, {
+        'get': methods.get,
+        'query': methods.query,
+        'delete': methods.delete,
+        'save': methods.save,
+      }),
+      { username: '', name: '' }
+    ),
   };
 });
