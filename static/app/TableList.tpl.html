@@ -1,0 +1,8 @@
+<h1>Tables</h1>
+<ul class='fa-ul'>
+  <li ng-repeat='name in tables'>
+    <a ui-sref='table.view({name: name})'>
+      <i class='fa fa-li fa-table'></i>{{name}}
+    </a>
+  </li>
+</ul>

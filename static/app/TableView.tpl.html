@@ -1,0 +1,70 @@
+<h1><i class='fa fa-table'></i>&nbsp;{{table.name}}</h1>
+
+<auto-table data='table.columns'
+            columns='columnTableColumns'
+            ></auto-table>
+
+<pulldown button-text='Show Fields...'
+          class='pull-right'
+          anchor='right'
+          max-height='300px'
+          pane-style='max-height:300px;
+                      min-width:300px;
+                      overflow-y:scroll;
+                      '
+          >
+  <a style='cursor:pointer;' ng-click='showAll()'>Show All</a> |
+  <a style='cursor:pointer;' ng-click='showDefaults()'>Show Defaults</a>
+
+  <div ng-repeat='column in columnTableColumns'>
+    <label style='cursor:pointer;'>
+      <input type='checkbox'
+             ng-model='column.disabled'
+             ng-init='column.disabled = !!column.disabled'
+             ng-true-value='false'
+             ng-false-value='true'
+             />&nbsp;{{ column.label || column.key }}
+    </label>
+  </div>
+</pulldown>
+<div class='clearfix'></div>
+
+<div class='row'>
+  <div class='col-md-6'>
+    <h2>Parent Foreign Keys <small>({{table.foreignKeyReferences.length}})</small></h2>
+    <div ng-repeat='foreignKey in table.foreignKeyReferences'>
+      <h3>
+        <a ui-sref='table.view({name: foreignKey.parent_table})'>
+          <i class='fa fa-table'></i>&nbsp;{{foreignKey.parent_table}}
+        </a>
+      </h3>
+      <p>Key name: {{foreignKey.fkey_constraint}}</p>
+      <p>On Delete: {{foreignKey.delete_rule}}</p>
+      <p>On Update: {{foreignKey.update_rule}}</p>
+      <ul class='fa-ul'>
+        <li ng-repeat='mapping in foreignKey.columns'>
+          <i class='fa-li fa fa-columns'></i> {{mapping.parent}} <i class='fa-fw fa fa-long-arrow-left'></i> {{mapping.child}}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class='col-md-6'>
+    <h2>Child Foreign Keys <small>({{table.foreignKeys.length}})</small></h2>
+    <div ng-repeat='foreignKey in table.foreignKeys'>
+      <h3>
+        <a ui-sref='table.view({name: foreignKey.child_table})'>
+          <i class='fa fa-table'></i>&nbsp;{{foreignKey.child_table}}
+        </a>
+      </h3>
+      <p>Key name: {{foreignKey.fkey_constraint}}</p>
+      <p>On Delete: {{foreignKey.delete_rule}}</p>
+      <p>On Update: {{foreignKey.update_rule}}</p>
+      <ul class='fa-ul'>
+        <li ng-repeat='mapping in foreignKey.columns'>
+          <i class='fa-li fa fa-columns'></i> {{mapping.parent}} <i class='fa fa-long-arrow-left'></i> {{mapping.child}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+

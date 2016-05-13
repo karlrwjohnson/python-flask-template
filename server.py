@@ -18,7 +18,7 @@ app.init(__name__,
 )
 
 import index
-import widgets
+import tables
 
 if __name__ == '__main__':
   app.app.run(debug=True)

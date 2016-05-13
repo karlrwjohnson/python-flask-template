@@ -49,6 +49,10 @@ def auto_404(result):
   else:
     return result
 
+def cursor_column_names(cursor):
+  '''Extract the names of the columns returned by the last query'''
+  return [column_description[0] for column_description in cursor.description]
+
 
 
 

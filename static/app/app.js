@@ -47,54 +47,28 @@ app.config(function(
       url: '/',
       templateUrl: LIB_ROOT + 'Main.tpl.html',
     })
-    .state('widgets', {
-      url: '/widgets',
+    .state('table', {
+      url: '/table',
       template: '<div ui-view></div>',
-      redirect: 'widgets.list',
+      redirect: 'table.list',
     })
-    .state('widgets.list', {
-      url: '/all?{highlight}',
-      templateUrl: LIB_ROOT + 'WidgetList.tpl.html',
-      controller: 'WidgetListCtrl',
+    .state('table.list', {
+      url: '/all',
+      templateUrl: LIB_ROOT + 'TableList.tpl.html',
+      controller: 'TableListCtrl',
       resolve: {
-        widgets: function(resources) {
-          return resources.widgets.query().$promise;
-        },
-        highlight: function($stateParams) {
-          console.log('highlight = ' + $stateParams.highlight);
-          return ('highlight' in $stateParams) ?
-            Number($stateParams.highlight) :
-            null;
+        tables: function(resources) {
+          return resources.table.query().$promise;
         },
       }
     })
-    .state('widgets.new', {
-      url: '/new',
-      templateUrl: LIB_ROOT + 'WidgetEdit.tpl.html',
-      controller: 'WidgetCtrl',
+    .state('table.view', {
+      url: '/:name',
+      templateUrl: LIB_ROOT + 'TableView.tpl.html',
+      controller: 'TableCtrl',
       resolve: {
-        widget: function(resources) {
-          return resources.widgets.new();
-        },
-      }
-    })
-    .state('widgets.view', {
-      url: '/:id',
-      templateUrl: LIB_ROOT + 'WidgetView.tpl.html',
-      controller: 'WidgetCtrl',
-      resolve: {
-        widget: function($stateParams, resources) {
-          return resources.widgets.get({ id: $stateParams.id }).$promise;
-        },
-      }
-    })
-    .state('widgets.edit', {
-      url: '/:id/edit',
-      templateUrl: LIB_ROOT + 'WidgetEdit.tpl.html',
-      controller: 'WidgetCtrl',
-      resolve: {
-        widget: function($stateParams, resources) {
-          return resources.widgets.get({ id: $stateParams.id }).$promise;
+        table: function($stateParams, resources) {
+          return resources.table.get({ name: $stateParams.name }).$promise;
         },
       }
     })

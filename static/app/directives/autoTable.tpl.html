@@ -1,0 +1,21 @@
+<table class='table table-grid'>
+  <thead>
+    <tr>
+      <th ng-repeat='column in columns track by $index'
+          ng-if='column.disabled === undefined || column.disabled === false'>
+        {{column.label || column.key || '#NO_LABEL#'}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat='row in data track by $index'>
+      <td ng-repeat='column in columns track by $index'
+          ng-if='column.disabled === undefined || column.disabled === false'>
+        {{ column.key ? row[column.key] :
+           column.formula ? column.formula(row) :
+           '#BAD_COLUMN#'
+        }}
+      </td>
+    </tr>
+  </tbody>
+</table>

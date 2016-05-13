@@ -11,23 +11,7 @@ app.service('resources', function($resource) {
     'delete': {method:'DELETE'}
   };
 
-  /**
-   * Add a .new() method to a resource object which returns a template object
-   * @param {Resource} resource - object to modify
-   * @param {Object} template - object to duplicate and return when .new() is called
-   * @return {Resource} - The original resource object
-   */
-  function addTemplate(resource, template) {
-    resource.new = function() {
-      return angular.copy(template);
-    }
-    return resource;
-  }
-
   return {
-    widgets: addTemplate(
-      $resource('/widgets/:id', {id: '@id'}, methods),
-      { name: '', data: '' }
-    ),
+    table: $resource('/table/:name', {name: '@name'}, methods)
   };
 });

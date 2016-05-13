@@ -3,9 +3,9 @@ app.constant('LINKS', [
     stateParams: {},
     text: 'Home'
   },
-  { stateName: 'widgets',
+  { stateName: 'table',
     stateParams: {},
-    text: 'Widgets'
+    text: 'Tables'
   },
 ]);
 
