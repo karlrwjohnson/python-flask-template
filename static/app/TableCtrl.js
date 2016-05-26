@@ -2,9 +2,11 @@ app.controller('TableCtrl', function(
   $scope,
   $state,
   resources,
-  table
+  table,
+  tables
 ) {
   $scope.table = table;
+  $scope.tables = tables;
 
   $scope.builtinColumnTableColumns = [
     {label: 'Column', key: 'column_name'},

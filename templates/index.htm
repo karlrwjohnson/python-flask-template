@@ -8,11 +8,8 @@
     <link rel='stylesheet' href='{{stylesheet}}' />
   {% endfor %}
 </head>
-<body>
-  <div class='container' ng-app='thing' ng-controller='MainCtrl'>
-    <div nav></div>
-    <div ui-view></div>
-  </div>
+<body ng-app='thing'>
+  <div ui-view></div>
 </body>
 {% for script in scripts %}
   <script src='{{script}}'></script>
