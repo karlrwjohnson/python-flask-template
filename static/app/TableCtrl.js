@@ -48,7 +48,6 @@ app.controller('TableCtrl', function(
 
   $scope.tablePreviewRows = [];
   $scope.refreshTablePreview = function() {
-    console.log($scope.tablePreviewRowLimit);
     resources.tableRows.query({
       name: table.name,
       limit: $scope.tablePreviewRowLimit.value,
