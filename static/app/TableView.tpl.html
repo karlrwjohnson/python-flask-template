@@ -32,6 +32,7 @@
                   "fa-chevron-up":    tablesPulldown.expanded,
                   "fa-chevron-down": !tablesPulldown.expanded
                 }'></i>
+            Jump to table
           </button>
         </h2>
       </pulldown-anchor>
@@ -41,7 +42,7 @@
           <ul class='fa-ul'>
             <li ng-repeat='tableName in tables'>
               <a ui-sref='app.table.view({name: tableName})'
-                 style='cursor:pointer;'>
+                 class='pointer'>
                 <i class='fa fa-li fa-table'></i>{{ tableName }}
               </a>
             </li>
@@ -79,6 +80,59 @@
       </div>
     </pulldown>
     -->
+
+    <pulldown pulldown-model='tablePreviewColumnsPulldown' style='display:block;'>
+      <pulldown-anchor>
+        <div class='form-inline pull-right'>
+          <label>
+            Limit to
+            <input type='number'
+                   class='form-control'
+                   ng-model='tablePreviewRowLimit.value' />
+            rows
+          </label>
+          <button class='btn btn-default'
+                  ng-click='refreshTablePreview()'>
+            <i class='fa fa-refresh'></i>
+            Refresh
+          </button>
+          <button class='btn btn-default'
+                  ng-click='tablePreviewColumnsPulldown.toggle()'>
+            <i class='fa fa-fw' ng-class='{
+                  "fa-chevron-up":    tablePreviewColumnsPulldown.expanded,
+                  "fa-chevron-down": !tablePreviewColumnsPulldown.expanded
+                }'></i>
+            Show/hide columns
+          </button>
+        </div>
+        <h3 class='display:inline;'>Data</h3>
+      </pulldown-anchor>
+      <pulldown-pane style='min-width:auto;right:0;'>
+        <a ng-click='resetColumns()' class='pointer'>Reset</a>
+        <ul class='fa-ul'>
+          <li ng-repeat='column in tablePreviewColumns track by $index'>
+            <label class='pointer'>
+              <input type='checkbox'
+                     class='fa-li'
+                     ng-model='column.disabled'
+                     ng-init='column.disabled = !!column.disabled'
+                     ng-true-value='false'
+                     ng-false-value='true'
+                     />
+              <a ng-click='tablePreviewColumns.splice($index, 1); tablePreviewColumns.splice($index-1, 0, column)'><i class='fa fa-caret-up'></i></a>
+              <a ng-click='tablePreviewColumns.splice($index, 1); tablePreviewColumns.splice($index+1, 0, column)'><i class='fa fa-caret-down'></i></a>
+              {{ column.label || column.key }}
+            </label>
+          </li>
+        </ul>
+      </pulldown-pane>
+    </pulldown>
+
+
+    <auto-table data='tablePreviewRows'
+                columns='tablePreviewColumns'
+                ></auto-table>
+
   </div>
   <div class='col-xs-3'>
     <h2>Child Foreign Keys <small>({{table.foreignKeys.length}})</small></h2>

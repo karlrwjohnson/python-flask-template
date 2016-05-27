@@ -1,6 +1,7 @@
 var app = angular.module('thing', [
   'ui.router',
   'ngResource',
+  'ngStorage',
 ]);
 
 app.constant('LIB_ROOT', 'static/app/');
@@ -37,36 +38,40 @@ app.config(function(
   'use strict';
 
   $stateProvider
-    .state('null', {
+    .state('app', {
       url: '',
+      templateUrl: LIB_ROOT + 'root.tpl.html',
+      redirect: 'app.table',
+    })
+    .state('app.root', {
+      url: '/',
       onEnter: function($state) {
-        $state.go('root');
+        $state.go('app.table');
       }
     })
-    .state('root', {
-      url: '/',
-      templateUrl: LIB_ROOT + 'Main.tpl.html',
-    })
-    .state('table', {
+    .state('app.table', {
       url: '/table',
       template: '<div ui-view></div>',
-      redirect: 'table.list',
+      redirect: 'app.table.list',
     })
-    .state('table.list', {
+    .state('app.table.list', {
       url: '/all',
       templateUrl: LIB_ROOT + 'TableList.tpl.html',
       controller: 'TableListCtrl',
       resolve: {
-        tables: function(resources) {
-          return resources.table.query().$promise;
+        tables: function(TableListService) {
+          return TableListService.tables;
         },
       }
     })
-    .state('table.view', {
+    .state('app.table.view', {
       url: '/:name',
       templateUrl: LIB_ROOT + 'TableView.tpl.html',
       controller: 'TableCtrl',
       resolve: {
+        tables: function(TableListService) {
+          return TableListService.tables;
+        },
         table: function($stateParams, resources) {
           return resources.table.get({ name: $stateParams.name }).$promise;
         },

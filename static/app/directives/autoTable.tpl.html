@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='row in data track by $index'>
+    <tr ng-repeat='row in data'>
       <td ng-repeat='column in columns track by $index'
           ng-if='column.disabled === undefined || column.disabled === false'>
         {{ column.key ? row[column.key] :

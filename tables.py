@@ -3,6 +3,7 @@ import flask
 from   app import app
 import database
 import http_status
+import re
 from   util import \
   auto_404, \
   cursor_column_names, \
@@ -136,6 +137,50 @@ def _get_table_foreign_key_references(table_name):
 def get_table_foreign_key_references(table_name):
   return _get_table_foreign_key_references(table_name)
 
+
+@app.route('/table/<table_name>/rows', methods=['GET'])
+@json_response
+def get_table_rows(table_name):
+
+  if not re.match(r'^[A-Za-z][A-Za-z0-9_]*$', table_name):
+    print 'Invalid table name {}'.format(table_name)
+    flask.abort(http_status.BAD_REQUEST)
+
+  for arg in flask.request.args.keys():
+    if not re.match(r'^[A-Za-z][A-Za-z0-9_]*$', table_name):
+      print 'Invalid filter name {}'.format(arg)
+      flask.abort(http_status.BAD_REQUEST)
+
+  if 'limit' in flask.request.args:
+    try:
+      limit = int(flask.request.args['limit'])
+    except ValueError:
+      print 'Expected limit to be an integer; got {!r}'.format(flask.request.args['limit'])
+      flask.abort(http_status.BAD_REQUEST)
+  else:
+    limit = 20
+
+  # Extract dict to list to guarantee the keys are always iterated
+  # in the same order
+  filters = [ (k, v)
+              for k, v in flask.request.args.iteritems()
+              if k != 'limit' ]
+  query_template = 'select * from {} '.format(table_name) + \
+      ''.join([ 'where {} = %s '.format(key) for k, v in filters ]) + \
+      'limit %s'
+  query_template_parameters = tuple([v for k, v in filters] + [limit])
+
+  print query_template
+  print query_template_parameters
+  print query_template % query_template_parameters
+
+  with database.cursor() as cursor:
+    cursor.execute(query_template, query_template_parameters);
+    column_names = cursor_column_names(cursor)
+    return [
+      dict(zip(column_names, row))
+      for row in cursor
+    ]
 
 
 #select to_json(ARRAY(

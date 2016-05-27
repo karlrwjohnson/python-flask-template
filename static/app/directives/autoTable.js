@@ -14,23 +14,32 @@ app.directive('autoTable', function(LIB_ROOT) {
 
         // Temporary value while we're waiting
         $scope.columns = [];
+        var prevColumns = $scope.columns;
+        var prevData = $scope.data;
 
         // Callback returned from $watch() that kills the listener
         var clearWatch;
 
         // Run this every time $scope.columns changes until it's valid
         function whileColumnsNotSet() {
+          // Only act when the data has been filled in
           if ($scope.data.length > 0) {
-            $scope.columns = Object.keys($scope.data[0])
-              .map(function(columnName) {
-                return {name: columnName};
-              });
+            // Auto-generate columns if the user hasn't created them yet.
+            if ($scope.columns.length === 0) {
+              $scope.columns = Object.keys($scope.data[0])
+                .map(function(columnName) {
+                  return {key: columnName};
+                });
+            }
             clearWatch();
           }
         }
 
         // Set up the $watch expression
-        clearWatch = $scope.$watch($scope.columns, whileColumnsNotSet);
+        clearWatch = $scope.$watch(/*$scope.columns*/ function() {
+          return prevColumns === $scope.columns &&
+                 prevData === $scope.data;
+        }, whileColumnsNotSet);
 
         // Initial run
         whileColumnsNotSet();

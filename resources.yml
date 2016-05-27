@@ -13,11 +13,12 @@ stylesheets:
 - "static/bootstrap-3.3.6-dist/css/bootstrap.css"
 - "static/bootstrap-3.3.6-dist/css/bootstrap-theme.css"
 - "static/font-awesome-4.6.2/css/font-awesome.min.css"
+- "static/app/**/*.css"
 
 scripts:
 # External deps
 - "static/angular.js"
-- "static/angular-*.js"
+- "static/*.js"
 # Internal deps
 - "static/app/app.js"
 - "static/app/**/*.js"

@@ -12,6 +12,7 @@ app.service('resources', function($resource) {
   };
 
   return {
-    table: $resource('/table/:name', {name: '@name'}, methods)
+    table: $resource('/table/:name', {name: '@name'}, methods),
+    tableRows: $resource('/table/:name/rows', {name: '@name'}),
   };
 });

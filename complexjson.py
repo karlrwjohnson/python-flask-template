@@ -1,3 +1,4 @@
+import datetime
 import json
 
 class MyEncoder(json.JSONEncoder):
@@ -5,6 +6,8 @@ class MyEncoder(json.JSONEncoder):
   def default(self, thing):
     if hasattr(thing, 'toJSON') and callable(thing.toJSON):
       return thing.toJSON()
+    elif type(thing) is datetime.datetime:
+      return thing.isoformat()
     else:
       return thing.__dict__
 
